@@ -1,10 +1,9 @@
+using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using Levels;
 using Nodes;
 using UnityEngine;
-using Quaternion = UnityEngine.Quaternion;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 public class GridManager : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class GridManager : MonoBehaviour
     private int rows;
     private int columns;
 
-    private GameObject[,] _grid;
+    private List<NodeContext> _grid;
     
     
     public void InstantiateGrid()
@@ -22,7 +21,7 @@ public class GridManager : MonoBehaviour
         rows = GameManager.GRID_SIZE_X;
         columns = GameManager.GRID_SIZE_Y;
 
-        _grid = new GameObject[rows, columns];
+        _grid = new List<NodeContext>();
 
         var levelData = LevelManager.Instance.GetCurrentLevelData();
 
@@ -37,24 +36,66 @@ public class GridManager : MonoBehaviour
                     InstantiateNode(nodeContent, nodePosition);
                 }
             }
+            
+            AssignSurroundingsToContext();
+        }
+        else
+        {
+            //TODO: Implement algorithm to generate levels
+            Debug.LogWarning("Implement algorithm");
         }
     }
 
     private NodeContent GetNodeContent(Level actualLevel, Vector2 position)
     {
-        return actualLevel.nodes.Exists(node => node.position == position) ? actualLevel.nodes.FirstOrDefault(n => n.position == position).content : NodeContent.Empty;
+        return actualLevel.nodes.Exists(node => node.position == position) 
+            ? actualLevel.nodes.FirstOrDefault(n => n.position == position).content
+            : NodeContent.Empty;
     }
 
     private void InstantiateNode(NodeContent content, Vector2 position)
     {
         var nodeIngredient = ObjectHandler.Instance.GetObjectFromContent(content);
         var node = Instantiate(nodeIngredient, CalculateNodePosition(position), Quaternion.identity, transform);
-        _grid[(int) position.x, (int) position.y] = node;
+
+        var context = node.GetComponent<NodeContext>();
+        context.content = content;
+        context.assignedNodeObject = node;
+        context.position = position;
+
+        context.Interactable = content != NodeContent.Empty;
+        
+        _grid.Add(context);
     }
 
     private Vector3 CalculateNodePosition(Vector2 gridPosition)
     {
         return new Vector3(NodeSizeX * gridPosition.x, 0, NodeSizeY * gridPosition.y);
-    } 
+    }
+
+    private void AssignSurroundingsToContext()
+    {
+        foreach (var nodeContext in _grid)
+        {
+            var nodePosition = nodeContext.position;
+            nodeContext.surroundingNodes = GetSurroundingContexts(nodePosition);
+        }
+    }
+
+    // Analyse and add surrounding data to node context
+    private List<NodeContext> GetSurroundingContexts(Vector2 position)
+    {
+        var top = GetContextFromPosition(new Vector2(position.x, position.y + 1));
+        var right = GetContextFromPosition(new Vector2(position.x + 1, position.y));
+        var bottom = GetContextFromPosition(new Vector2(position.x - 1, position.y - 1));
+        var left = GetContextFromPosition(new Vector2(position.x - 1, position.y + 1));
+        return new List<NodeContext>{top, right, bottom, left};
+    }
+
+    // It returns null if can't find node from position
+    private NodeContext GetContextFromPosition(Vector2 position)
+    {
+        return _grid.FirstOrDefault(context => context.position == position);
+    }
     
 }

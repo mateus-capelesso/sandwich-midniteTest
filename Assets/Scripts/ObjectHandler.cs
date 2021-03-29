@@ -8,6 +8,7 @@ public class ObjectHandler : MonoBehaviour
     
     private GameObject _empty;
     private GameObject _bread;
+    private GameObject _bacon;
     private GameObject _cheese;
     private GameObject _egg;
     private GameObject _ham;
@@ -31,6 +32,7 @@ public class ObjectHandler : MonoBehaviour
     {
         _empty = Resources.Load<GameObject>("ingredients/Empty");
         _bread = Resources.Load<GameObject>("ingredients/Bread");
+        _bacon = Resources.Load<GameObject>("ingredients/Bacon");
         _cheese = Resources.Load<GameObject>("ingredients/Cheese");
         _egg = Resources.Load<GameObject>("ingredients/Egg");
         _ham = Resources.Load<GameObject>("ingredients/Ham");
@@ -47,6 +49,8 @@ public class ObjectHandler : MonoBehaviour
             case NodeContent.Empty:
                 return _empty;
             case NodeContent.Bread:
+                return _bread;
+            case NodeContent.Bacon:
                 return _bread;
             case NodeContent.Cheese:
                 return _cheese;
