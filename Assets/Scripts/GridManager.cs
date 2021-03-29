@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.Linq;
+using InputManagement;
 using Levels;
 using Nodes;
 using UnityEngine;
@@ -14,8 +14,13 @@ public class GridManager : MonoBehaviour
     private int columns;
 
     private List<NodeContext> _grid;
-    
-    
+
+    private void Start()
+    {
+        InputManager.OnSwipeDetected += OnSwipe;
+    }
+
+
     public void InstantiateGrid()
     {
         rows = GameManager.GRID_SIZE_X;
@@ -97,5 +102,43 @@ public class GridManager : MonoBehaviour
     {
         return _grid.FirstOrDefault(context => context.position == position);
     }
-    
+
+    private void OnSwipe(Direction swipeDirection, GameObject selectedNode)
+    {
+        var selectedContext = selectedNode.GetComponent<NodeContext>();
+        if (!selectedContext.Interactable) return;
+        
+        switch (swipeDirection)
+        {
+            case Direction.Top:
+                if (selectedContext.surroundingNodes[0] != null)
+                {
+                    MoveToDesiredNode(selectedContext, selectedContext.surroundingNodes[0], swipeDirection);
+                }
+                break;
+            case Direction.Right:
+                if (selectedContext.surroundingNodes[1] != null)
+                {
+                    MoveToDesiredNode(selectedContext, selectedContext.surroundingNodes[1], swipeDirection);
+                }         
+                break;
+            case Direction.Bottom:
+                if (selectedContext.surroundingNodes[2] != null)
+                {
+                    MoveToDesiredNode(selectedContext, selectedContext.surroundingNodes[2], swipeDirection);
+                }               
+                break;
+            case Direction.Left:
+                if (selectedContext.surroundingNodes[3] != null)
+                {
+                    MoveToDesiredNode(selectedContext, selectedContext.surroundingNodes[3], swipeDirection);
+                }                
+                break;
+        }
+    }
+
+    private void MoveToDesiredNode(NodeContext selectedNode, NodeContext targetNode, Direction direction)
+    {
+        
+    }
 }
