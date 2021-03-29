@@ -48,6 +48,10 @@ public class GridManager : MonoBehaviour
         else
         {
             //TODO: Implement algorithm to generate levels
+            //List of available Vector2 positions. Instantiate first bread on a random(0, columns*rows),
+            //then get the Vector2 position, and get the surrounding positions and add it to a list.
+            //Everytime you pick a new ingredient and place it, add more available positions on the list.
+            //When number of pieces are over, AssignSurroundingsToContext().
             Debug.LogWarning("Implement algorithm");
         }
     }
@@ -77,6 +81,24 @@ public class GridManager : MonoBehaviour
     private Vector3 CalculateNodePosition(Vector2 gridPosition)
     {
         return new Vector3(NodeSizeX * gridPosition.x, 0, NodeSizeY * gridPosition.y);
+    }
+
+    private Vector3 CalculateRotationByDirection(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Top:
+                return new Vector3(-180f, 0, 0);
+            case Direction.Right:
+                return new Vector3(0, 0, 180f);
+            case Direction.Bottom:
+                return new Vector3(180f, 0, 0);
+            case Direction.Left:
+                return new Vector3(0, 0, -180f);
+            default:
+                Debug.LogError($"Couldn't find any rotation for {direction}");
+                return Vector3.zero;
+        }
     }
 
     private void AssignSurroundingsToContext()
@@ -157,6 +179,8 @@ public class GridManager : MonoBehaviour
             targetNode.position.x,
             targetNodeHeight + selectedNodeHeight, 
             targetNode.position.y);
+        
+        selectedNode.assignedNodeObject.transform.Rotate(CalculateRotationByDirection(direction));
 
         _grid.Find(n => n == selectedNode).position = targetNode.position;
         
@@ -168,7 +192,7 @@ public class GridManager : MonoBehaviour
 
     private float GetNodeHeight(int childrenCount)
     {
-        var height = GameManager.NODE_HEIGHT/2f;
+        var height = GameManager.NODE_HEIGHT;
         height += childrenCount * GameManager.NODE_HEIGHT;
         
         return height;
@@ -177,6 +201,8 @@ public class GridManager : MonoBehaviour
     private void CheckSandwichStack()
     {
         //TODO: WIN LOGIC
+        // Get all world position of each ingredient that isn't empty and add it to an array
+        // sort array, if the first and last items are bread, win!
         Debug.Log("Sandwich done");
     }
 }
