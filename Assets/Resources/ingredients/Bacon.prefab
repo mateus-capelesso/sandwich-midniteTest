@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 931107395545953064}
   - component: {fileID: 6906125260182687697}
   - component: {fileID: 8662566135199367603}
+  - component: {fileID: 291036237099912674}
   m_Layer: 0
   m_Name: Bacon
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5182423098906426125}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -94,10 +95,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f24947b707f48d6af0225eb56150229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
   surroundingNodes: []
   childrenNodes: []
   parentNode: {fileID: 0}
   assignedNodeObject: {fileID: 0}
   content: 0
   position: {x: 0, y: 0}
+--- !u!65 &291036237099912674
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5182423098906426125}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.89129245, y: 0.089999996, z: 0.967615}
+  m_Center: {x: 0.000000014901161, y: 0.044999998, z: 0}

@@ -18,6 +18,7 @@ public class GridManager : MonoBehaviour
     private void Start()
     {
         InputManager.OnSwipeDetected += OnSwipe;
+        LevelManager.Instance.OnSandwichDone += CheckSandwichStack;
     }
 
 
@@ -90,10 +91,10 @@ public class GridManager : MonoBehaviour
     // Analyse and add surrounding data to node context
     private List<NodeContext> GetSurroundingContexts(Vector2 position)
     {
-        var top = GetContextFromPosition(new Vector2(position.x, position.y + 1));
-        var right = GetContextFromPosition(new Vector2(position.x + 1, position.y));
-        var bottom = GetContextFromPosition(new Vector2(position.x - 1, position.y - 1));
-        var left = GetContextFromPosition(new Vector2(position.x - 1, position.y + 1));
+        var top = GetContextFromPosition(new Vector2(position.x, position.y - 1));
+        var right = GetContextFromPosition(new Vector2(position.x - 1, position.y));
+        var bottom = GetContextFromPosition(new Vector2(position.x, position.y + 1));
+        var left = GetContextFromPosition(new Vector2(position.x + 1, position.y));
         return new List<NodeContext>{top, right, bottom, left};
     }
 
@@ -106,32 +107,33 @@ public class GridManager : MonoBehaviour
     private void OnSwipe(Direction swipeDirection, GameObject selectedNode)
     {
         var selectedContext = selectedNode.GetComponent<NodeContext>();
+        var selectedStack = selectedContext.GetParent;
         if (!selectedContext.Interactable) return;
         
         switch (swipeDirection)
         {
             case Direction.Top:
-                if (selectedContext.surroundingNodes[0] != null)
+                if (selectedStack.surroundingNodes[0] != null)
                 {
-                    MoveToDesiredNode(selectedContext, selectedContext.surroundingNodes[0], swipeDirection);
+                    MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[0], swipeDirection);
                 }
                 break;
             case Direction.Right:
-                if (selectedContext.surroundingNodes[1] != null)
+                if (selectedStack.surroundingNodes[1] != null)
                 {
-                    MoveToDesiredNode(selectedContext, selectedContext.surroundingNodes[1], swipeDirection);
+                    MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[1], swipeDirection);
                 }         
                 break;
             case Direction.Bottom:
-                if (selectedContext.surroundingNodes[2] != null)
+                if (selectedStack.surroundingNodes[2] != null)
                 {
-                    MoveToDesiredNode(selectedContext, selectedContext.surroundingNodes[2], swipeDirection);
+                    MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[2], swipeDirection);
                 }               
                 break;
             case Direction.Left:
-                if (selectedContext.surroundingNodes[3] != null)
+                if (selectedStack.surroundingNodes[3] != null)
                 {
-                    MoveToDesiredNode(selectedContext, selectedContext.surroundingNodes[3], swipeDirection);
+                    MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[3], swipeDirection);
                 }                
                 break;
         }
@@ -139,6 +141,42 @@ public class GridManager : MonoBehaviour
 
     private void MoveToDesiredNode(NodeContext selectedNode, NodeContext targetNode, Direction direction)
     {
+        if (targetNode.content == NodeContent.Empty) return;
         
+        var targetNodeHeight = GetNodeHeight(targetNode.ChildrenCount);
+        var selectedNodeHeight = GetNodeHeight(targetNode.ChildrenCount);
+
+        // setup objects hierarchy for rotation movement 
+        selectedNode.Interactable = false;
+        selectedNode.parentNode = targetNode;
+        targetNode.childrenNodes.Add(selectedNode);
+
+        
+        // TODO: ADD TWEEN MOVEMENTS ON NODE
+        selectedNode.assignedNodeObject.transform.position = new Vector3(
+            targetNode.position.x,
+            targetNodeHeight + selectedNodeHeight, 
+            targetNode.position.y);
+
+        _grid.Find(n => n == selectedNode).position = targetNode.position;
+        
+        selectedNode.assignedNodeObject.transform.SetParent(targetNode.assignedNodeObject.transform);
+        selectedNode.Interactable = true;
+        LevelManager.Instance.DecreaseNodesAvailable();
+
+    }
+
+    private float GetNodeHeight(int childrenCount)
+    {
+        var height = GameManager.NODE_HEIGHT/2f;
+        height += childrenCount * GameManager.NODE_HEIGHT;
+        
+        return height;
+    }
+
+    private void CheckSandwichStack()
+    {
+        //TODO: WIN LOGIC
+        Debug.Log("Sandwich done");
     }
 }

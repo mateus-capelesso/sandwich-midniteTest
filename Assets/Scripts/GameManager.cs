@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     
     public const int GRID_SIZE_X = 4;
     public const int GRID_SIZE_Y = 4;
+    public const float NODE_HEIGHT = 0.1f;
 
     private void Awake()
     {

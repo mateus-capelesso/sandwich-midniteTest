@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -11,7 +12,7 @@ namespace Nodes
         
         public List<NodeContext> surroundingNodes = new List<NodeContext>(4);
         [HideInInspector] public List<NodeContext> childrenNodes;
-        [HideInInspector] public NodeContext parentNode;
+        public NodeContext parentNode;
         
         [Header("Node Properties")]
         public GameObject assignedNodeObject;
@@ -22,13 +23,13 @@ namespace Nodes
         {
             get
             {
-                var nodeContext = this;
-                while (nodeContext.parentNode != null)
+                var node = this;
+                while (node.parentNode != null)
                 {
-                    nodeContext = nodeContext.parentNode;
+                    node = node.parentNode;
                 }
 
-                return nodeContext;
+                return node;
             }
         }
 
@@ -38,6 +39,11 @@ namespace Nodes
             {
                 return childrenNodes.Count + childrenNodes.Sum(context => context.ChildrenCount);
             }
+        }
+
+        public bool IsOnTopOrBottom()
+        {
+            return ChildrenCount == 0 || parentNode != null;
         }
 
     }

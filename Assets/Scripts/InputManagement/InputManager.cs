@@ -21,7 +21,8 @@ namespace InputManagement
 
         private void Update()
         {
-            if (Input.GetMouseButtonUp(0))
+#if UNITY_EDITOR
+            if (Input.GetMouseButtonDown(0))
             {
                 _fingerDown = Input.mousePosition;
                 _fingerUp = Input.mousePosition;
@@ -31,11 +32,11 @@ namespace InputManagement
 
             if (Input.GetMouseButtonUp(0))
             {
-                _fingerDown = Input.mousePosition;
+                _fingerUp = Input.mousePosition;
                 _fingerUpTime = DateTime.Now;
                 CheckSwipe();
             }
-
+#else
             foreach (Touch touch in Input.touches)
             {
                 switch (touch.phase)
@@ -53,6 +54,7 @@ namespace InputManagement
                         break;
                 }
             }
+#endif
         }
 
         private void CheckSwipe()
@@ -63,15 +65,15 @@ namespace InputManagement
             var deltaX = _fingerDown.x - _fingerUp.x;
             var deltaY = _fingerDown.y - _fingerUp.y;
 
-            if (deltaX > deltaY)
+            if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
             {
                 if (Mathf.Abs(deltaX) > swipeThreshold)
                 {
-                    if (deltaX > 0)
+                    if (deltaX < 0)
                     {
                         OnSwipeDetected?.Invoke(Direction.Right, _clickedObject);
                     }
-                    else if (deltaX < 0)
+                    else if (deltaX > 0)
                     {
                         OnSwipeDetected?.Invoke(Direction.Left, _clickedObject);
                     }
@@ -81,11 +83,11 @@ namespace InputManagement
             {
                 if (Mathf.Abs(deltaY) > swipeThreshold)
                 {
-                    if (deltaY > 0)
+                    if (deltaY < 0)
                     {
                         OnSwipeDetected?.Invoke(Direction.Top, _clickedObject);
                     }
-                    else if (deltaY < 0)
+                    else if (deltaY > 0)
                     {
                         OnSwipeDetected?.Invoke(Direction.Bottom, _clickedObject);
                     }
@@ -100,7 +102,8 @@ namespace InputManagement
             var ray = mainCamera.ScreenPointToRay(position);
             if( Physics.Raycast( ray, out var hit, 100 ) )
             {
-                _clickedObject = hit .transform.gameObject;
+                if(hit.transform.gameObject != null)
+                    _clickedObject = hit.transform.gameObject;
             }
         }
     }

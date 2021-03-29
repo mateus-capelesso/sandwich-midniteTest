@@ -51,7 +51,7 @@ public class ObjectHandler : MonoBehaviour
             case NodeContent.Bread:
                 return _bread;
             case NodeContent.Bacon:
-                return _bread;
+                return _bacon;
             case NodeContent.Cheese:
                 return _cheese;
             case NodeContent.Egg:

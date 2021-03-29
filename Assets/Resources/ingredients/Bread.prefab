@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1945867448027493039}
   - component: {fileID: 5205480885870612054}
   - component: {fileID: -478592071834997094}
+  - component: {fileID: 5481048864658163696}
   m_Layer: 0
   m_Name: Bread
   m_TagString: Untagged
@@ -94,10 +95,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f24947b707f48d6af0225eb56150229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
   surroundingNodes: []
   childrenNodes: []
   parentNode: {fileID: 0}
   assignedNodeObject: {fileID: 0}
   content: 0
   position: {x: 0, y: 0}
+--- !u!65 &5481048864658163696
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5764962964242528906}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9, y: 0.089999996, z: 0.9}
+  m_Center: {x: 0, y: 0.044999998, z: 0}
