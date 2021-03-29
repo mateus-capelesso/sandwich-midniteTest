@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Nodes
 {
+    [Serializable]
     public class Node
     {
         public NodeContent content;

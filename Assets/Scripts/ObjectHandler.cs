@@ -29,15 +29,15 @@ public class ObjectHandler : MonoBehaviour
 
     private void LoadObjects()
     {
-        _empty = Resources.Load<GameObject>("ingredients/empty");
-        _bread = Resources.Load<GameObject>("ingredients/bread");
-        _cheese = Resources.Load<GameObject>("ingredients/cheese");
-        _egg = Resources.Load<GameObject>("ingredients/egg");
-        _ham = Resources.Load<GameObject>("ingredients/ham");
-        _onion = Resources.Load<GameObject>("ingredients/onion");
-        _salad = Resources.Load<GameObject>("ingredients/salad");
-        _salami = Resources.Load<GameObject>("ingredients/salami");
-        _tomato = Resources.Load<GameObject>("ingredients/tomato");
+        _empty = Resources.Load<GameObject>("ingredients/Empty");
+        _bread = Resources.Load<GameObject>("ingredients/Bread");
+        _cheese = Resources.Load<GameObject>("ingredients/Cheese");
+        _egg = Resources.Load<GameObject>("ingredients/Egg");
+        _ham = Resources.Load<GameObject>("ingredients/Ham");
+        _onion = Resources.Load<GameObject>("ingredients/Onion");
+        _salad = Resources.Load<GameObject>("ingredients/Salad");
+        _salami = Resources.Load<GameObject>("ingredients/Salami");
+        _tomato = Resources.Load<GameObject>("ingredients/Tomato");
     }
 
     public GameObject GetObjectFromContent(NodeContent content)

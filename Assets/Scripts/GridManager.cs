@@ -13,12 +13,16 @@ public class GridManager : MonoBehaviour
     
     private int rows;
     private int columns;
+
+    private GameObject[,] _grid;
     
     
     public void InstantiateGrid()
     {
         rows = GameManager.GRID_SIZE_X;
         columns = GameManager.GRID_SIZE_Y;
+
+        _grid = new GameObject[rows, columns];
 
         var levelData = LevelManager.Instance.GetCurrentLevelData();
 
@@ -29,24 +33,28 @@ public class GridManager : MonoBehaviour
                 for (var y = 0; y < columns; y++)
                 {
                     var nodePosition = new Vector2(x, y);
-                    var nodeContent = levelData.nodes.FirstOrDefault(n => n.position == nodePosition).content;
+                    var nodeContent = GetNodeContent(levelData, nodePosition);
                     InstantiateNode(nodeContent, nodePosition);
                 }
             }
         }
-        
+    }
+
+    private NodeContent GetNodeContent(Level actualLevel, Vector2 position)
+    {
+        return actualLevel.nodes.Exists(node => node.position == position) ? actualLevel.nodes.FirstOrDefault(n => n.position == position).content : NodeContent.Empty;
     }
 
     private void InstantiateNode(NodeContent content, Vector2 position)
     {
         var nodeIngredient = ObjectHandler.Instance.GetObjectFromContent(content);
-
         var node = Instantiate(nodeIngredient, CalculateNodePosition(position), Quaternion.identity, transform);
+        _grid[(int) position.x, (int) position.y] = node;
     }
 
     private Vector3 CalculateNodePosition(Vector2 gridPosition)
     {
-        return new Vector3(NodeSizeX * gridPosition.x, NodeSizeY * gridPosition.y, 0f);
+        return new Vector3(NodeSizeX * gridPosition.x, 0, NodeSizeY * gridPosition.y);
     } 
     
 }
