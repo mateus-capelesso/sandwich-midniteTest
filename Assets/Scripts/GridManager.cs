@@ -10,6 +10,10 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    public const int GRID_SIZE_X = 4;
+    public const int GRID_SIZE_Y = 4;
+    public const float NODE_HEIGHT = 0.09f;
+    
     public LevelGenerator generator;
     public CameraMovement cameraMovement;
     
@@ -34,8 +38,8 @@ public class GridManager : MonoBehaviour
     
     public void InstantiateGrid()
     {
-        var rows = GameManager.GRID_SIZE_X;
-        var columns = GameManager.GRID_SIZE_Y;
+        var rows = GRID_SIZE_X;
+        var columns = GRID_SIZE_Y;
 
         _grid = new List<NodeContext>();
 
@@ -234,8 +238,8 @@ public class GridManager : MonoBehaviour
 
     private float GetNodeHeight(int childrenCount)
     {
-        var height = GameManager.NODE_HEIGHT;
-        height += childrenCount * GameManager.NODE_HEIGHT;
+        var height = NODE_HEIGHT;
+        height += childrenCount * NODE_HEIGHT;
 
         return height;
     }

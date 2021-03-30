@@ -7,8 +7,8 @@ namespace Levels
 {
     public class LevelGenerator : MonoBehaviour
     {
-        private int rows = GameManager.GRID_SIZE_X;
-        private int columns = GameManager.GRID_SIZE_Y;
+        private int rows = GridManager.GRID_SIZE_X;
+        private int columns = GridManager.GRID_SIZE_Y;
         private List<Vector2> _availablePositions;
         
         

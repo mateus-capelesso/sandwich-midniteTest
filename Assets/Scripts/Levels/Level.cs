@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Levels
 {
     [Serializable]
-    public class Level
+    public class Level: ScriptableObject
     {
         public string seed;
         [Tooltip("Number of ingredients and bread to be instantiated on random level generation")]
