@@ -40,11 +40,5 @@ namespace Nodes
                 return childrenNodes.Count + childrenNodes.Sum(context => context.ChildrenCount);
             }
         }
-
-        public bool IsOnTopOrBottom()
-        {
-            return ChildrenCount == 0 || parentNode != null;
-        }
-
     }
 }
