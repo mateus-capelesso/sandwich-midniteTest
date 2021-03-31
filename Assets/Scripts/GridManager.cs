@@ -119,6 +119,7 @@ public class GridManager : MonoBehaviour
         return _grid.FirstOrDefault(context => context.position == position);
     }
 
+    // Gets the parent object of the stack, and check if the movement is available for its position.
     private void OnSwipe(Direction swipeDirection, GameObject selectedNode)
     {
         var selectedContext = selectedNode.GetComponent<NodeContext>();
@@ -149,6 +150,7 @@ public class GridManager : MonoBehaviour
         return availableDirections;
     }
 
+    // Translates direction to a Vector3, for movement and rotation purposes.
     private Vector3 GetVectorFromDirection(Direction direction)
     {
         switch (direction)

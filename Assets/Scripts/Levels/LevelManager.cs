@@ -41,7 +41,6 @@ namespace Levels
 
         private void LoadActualLevelValue()
         {
-            // PlayerPrefs.DeleteAll();
             _actualLevel = PlayerPrefs.HasKey("actualLevel") ? PlayerPrefs.GetInt("actualLevel") : 1;
         }
 

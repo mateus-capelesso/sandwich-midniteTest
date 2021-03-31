@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections;
-using DG.Tweening;
+﻿using DG.Tweening;
 using Levels;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public Vector3 objectPosition;
-    public Vector3 objectRotation;
-    
     private Vector3 _cameraPosition;
     private Quaternion _cameraRotation;
     private GameObject _sandwich;
