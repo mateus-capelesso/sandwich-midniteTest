@@ -223,7 +223,6 @@ public class GridManager : MonoBehaviour
             }
         }
         
-        Debug.Log("locked");
         OnLose?.Invoke();
     }
 
