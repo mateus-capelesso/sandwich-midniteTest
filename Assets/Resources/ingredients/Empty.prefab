@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3517704567855040447}
   m_Layer: 0
   m_Name: Empty
-  m_TagString: Untagged
+  m_TagString: Ingredients
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,7 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f24947b707f48d6af0225eb56150229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
   surroundingNodes: []
   childrenNodes: []
   parentNode: {fileID: 0}

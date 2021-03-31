@@ -23,8 +23,14 @@ public class CameraMovement : MonoBehaviour
     public void CameraLookToObject(GameObject obj)
     {
         _sandwich = obj;
-        obj.transform.DORotate(objectRotation, 1f).SetEase(Ease.OutBack);
-        obj.transform.DOMove(objectPosition, 1f).SetEase(Ease.OutBack);
+        var sandwichPosition = _sandwich.transform.position;
+
+        var targetPosition = new Vector3(sandwichPosition.x, 1.75f, sandwichPosition.z + 3f);
+        var targetRotation = new Vector3(30f, 180f, 0f);
+        
+        transform.DORotate(targetRotation, 1f).SetEase(Ease.OutBack);
+        transform.DOMove(targetPosition, 1f).SetEase(Ease.OutBack);
+        
     }
 
     private void SetUpCameraForNewLevel()

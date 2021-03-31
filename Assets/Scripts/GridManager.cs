@@ -7,6 +7,8 @@ using InputManagement;
 using Levels;
 using Nodes;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class GridManager : MonoBehaviour
 {
@@ -28,6 +30,8 @@ public class GridManager : MonoBehaviour
 
     public static Action OnWin;
     public static Action OnLose;
+
+    public UnityEvent onSwipeSuccessful;
 
     private void Start()
     {
@@ -90,24 +94,6 @@ public class GridManager : MonoBehaviour
         return new Vector3(NodeSizeX * gridPosition.x, 0, NodeSizeY * gridPosition.y);
     }
 
-    private Vector3 CalculateRotationByDirection(Direction direction)
-    {
-        switch (direction)
-        {
-            case Direction.Top:
-                return new Vector3(-180f, 0, 0);
-            case Direction.Right:
-                return new Vector3(0, 0, 180f);
-            case Direction.Bottom:
-                return new Vector3(180f, 0, 0);
-            case Direction.Left:
-                return new Vector3(0, 0, -180f);
-            default:
-                Debug.LogError($"Couldn't find any rotation for {direction}");
-                return Vector3.zero;
-        }
-    }
-
     private void AssignSurroundingsToContext()
     {
         foreach (var nodeContext in _grid)
@@ -135,46 +121,54 @@ public class GridManager : MonoBehaviour
 
     private void OnSwipe(Direction swipeDirection, GameObject selectedNode)
     {
-        if (_gameIsOver) return;
-        if (_blockInputsWhileTween) return;
-        
         var selectedContext = selectedNode.GetComponent<NodeContext>();
         var selectedStack = selectedContext.GetParent;
-        if (!selectedStack.Interactable) return;
         
-        
-        switch (swipeDirection)
+        if (_gameIsOver || _blockInputsWhileTween || !selectedStack.Interactable || !selectedNode.CompareTag("Ingredients"))
+        {
+            selectedStack.transform.DOShakeRotation(0.3f, GetVectorFromDirection(swipeDirection) * 20f, 10, 2f).SetEase(Ease.InOutBack);
+            return;
+        }
+
+        var validDirections = GetValidSurroundings(selectedStack);
+        if (validDirections.Contains(swipeDirection))
+            MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[(int) swipeDirection], swipeDirection);
+        else
+            selectedStack.transform.DOShakeRotation(0.3f, GetVectorFromDirection(swipeDirection) * 20f, 10, 2f).SetEase(Ease.InOutBack);
+    }
+
+    private List<Direction> GetValidSurroundings(NodeContext node)
+    {
+        var availableDirections = new List<Direction>();
+        foreach (var surrounding in node.surroundingNodes)
+        {
+            if (surrounding != null && surrounding.Interactable)
+                availableDirections.Add((Direction) node.surroundingNodes.IndexOf(surrounding));
+        }
+
+        return availableDirections;
+    }
+
+    private Vector3 GetVectorFromDirection(Direction direction)
+    {
+        switch (direction)
         {
             case Direction.Top:
-                if (selectedStack.surroundingNodes[0] != null && selectedStack.surroundingNodes[0].Interactable)
-                {
-                    MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[0], swipeDirection);
-                }
-                break;
+                return Vector3.left;
             case Direction.Right:
-                if (selectedStack.surroundingNodes[1] != null && selectedStack.surroundingNodes[1].Interactable)
-                {
-                    MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[1], swipeDirection);
-                }         
-                break;
+                return Vector3.forward;
             case Direction.Bottom:
-                if (selectedStack.surroundingNodes[2] != null && selectedStack.surroundingNodes[2].Interactable)
-                {
-                    MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[2], swipeDirection);
-                }               
-                break;
+                return Vector3.right;
             case Direction.Left:
-                if (selectedStack.surroundingNodes[3] != null && selectedStack.surroundingNodes[3].Interactable)
-                {
-                    MoveToDesiredNode(selectedStack, selectedStack.surroundingNodes[3], swipeDirection);
-                }                
-                break;
+                return Vector3.back;
+            default:
+                return Vector3.zero;
         }
     }
 
     private void MoveToDesiredNode(NodeContext selectedNode, NodeContext targetNode, Direction direction)
     {
-        if (targetNode.content == NodeContent.Empty) return;
+        onSwipeSuccessful?.Invoke();
         
         _blockInputsWhileTween = true;
         var targetNodeHeight = GetNodeHeight(targetNode.ChildrenCount);
@@ -185,10 +179,10 @@ public class GridManager : MonoBehaviour
         selectedNode.parentNode = targetNode;
         targetNode.childrenNodes.Add(selectedNode);
 
-        var rotate = CalculateRotationByDirection(direction);
+        var rotate = GetVectorFromDirection(direction) * 180;
         selectedNode.assignedNodeObject.transform.DORotate(
             selectedNode.assignedNodeObject.transform.rotation.eulerAngles + rotate,
-            0.3f).SetEase(Ease.OutSine);
+            0.25f).SetEase(Ease.OutSine);
         
         // Tween movement with bezier path, from actual, to midpoint, to targetPosition, when tween is completed, enable new movement from swipe
         var targetPosition = new Vector3(
@@ -197,10 +191,10 @@ public class GridManager : MonoBehaviour
             targetNode.position.y);
 
         var actualPosition = selectedNode.assignedNodeObject.transform.position;
-        var midPosition = new Vector3(actualPosition.x + (targetPosition.x - actualPosition.x) / 2, 1f,
+        var midPosition = new Vector3(actualPosition.x + (targetPosition.x - actualPosition.x) / 2, targetNodeHeight + selectedNodeHeight + 1f,
             actualPosition.z + (targetPosition.z - actualPosition.z) / 2);
 
-        selectedNode.assignedNodeObject.transform.DOPath(new[] {midPosition, targetPosition}, 0.3f, PathType.CatmullRom).SetEase(Ease.OutSine).
+        selectedNode.assignedNodeObject.transform.DOPath(new[] {midPosition, targetPosition}, 0.25f, PathType.CatmullRom).SetEase(Ease.OutSine).
             OnComplete(() =>
             {
                 _blockInputsWhileTween = false;
@@ -223,12 +217,9 @@ public class GridManager : MonoBehaviour
         
         foreach (var node in activeNodes)
         {
-            foreach (var neighbour in node.surroundingNodes)
+            if (GetValidSurroundings(node).Count >= 1)
             {
-                if (neighbour != null && neighbour.Interactable)
-                {
-                    return;
-                }
+                return;
             }
         }
         
