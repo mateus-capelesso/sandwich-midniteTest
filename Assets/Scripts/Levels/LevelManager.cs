@@ -57,7 +57,10 @@ namespace Levels
             {
                 currentLevel = CreateNewLevel(_actualLevel - 1);
                 storedLevels.levels.Add(currentLevel);
-                SaveLevel(currentLevel, _actualLevel);
+                #if UNITY_EDITOR
+                    SaveLevel(currentLevel, _actualLevel);
+                #endif
+
             }
             else
             {
@@ -118,8 +121,10 @@ namespace Levels
 
         private void SaveLevel(Level level, int actualLevel)
         {
-            AssetDatabase.CreateAsset(level, $"Assets/Resources/levels/{actualLevel}.asset");
-            AssetDatabase.SaveAssets();
+            #if UNITY_EDITOR
+                AssetDatabase.CreateAsset(level, $"Assets/Resources/levels/{actualLevel}.asset");
+                AssetDatabase.SaveAssets();
+            #endif
         }
 
         private void AddLevel()
