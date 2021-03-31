@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SandwichScene.unity
+    guid: 1a3b517dccb427d4ca4ff49520e3e955
   m_configObjects: {}
