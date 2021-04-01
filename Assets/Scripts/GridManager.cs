@@ -1,14 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Ingredients;
 using InputManagement;
 using Levels;
 using Nodes;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 public class GridManager : MonoBehaviour
 {
@@ -22,7 +21,7 @@ public class GridManager : MonoBehaviour
     private const float NodeSizeX = 1f;
     private const float NodeSizeY = 1f;
     
-    private NodeContext _lastSelectedNode;
+    private NodeContext _lastSelectedIngredient;
     private bool _gameIsOver = false;
     private bool _blockInputsWhileTween = false;
 
@@ -67,24 +66,24 @@ public class GridManager : MonoBehaviour
         AssignSurroundingsToContext();
     }
 
-    private NodeContent GetNodeContent(Level actualLevel, Vector2 position)
+    private IngredientType GetNodeContent(Level actualLevel, Vector2 position)
     {
         return actualLevel.nodes.Exists(node => node.position == position) 
             ? actualLevel.nodes.FirstOrDefault(n => n.position == position).content
-            : NodeContent.Empty;
+            : IngredientType.Empty;
     }
 
-    private void InstantiateNode(NodeContent content, Vector2 position)
+    private void InstantiateNode(IngredientType content, Vector2 position)
     {
         var nodeIngredient = ObjectHandler.Instance.GetObjectFromContent(content);
         var node = Instantiate(nodeIngredient, CalculateNodePosition(position), Quaternion.identity, transform);
 
         var context = node.GetComponent<NodeContext>();
-        context.content = content;
+        context.content = (int) content;
         context.assignedNodeObject = node;
         context.position = position;
 
-        context.Interactable = content != NodeContent.Empty;
+        context.Interactable = content != IngredientType.Empty;
         
         _grid.Add(context);
     }
@@ -138,13 +137,13 @@ public class GridManager : MonoBehaviour
             selectedStack.transform.DOShakeRotation(0.3f, GetVectorFromDirection(swipeDirection) * 20f, 10, 2f).SetEase(Ease.InOutBack);
     }
 
-    private List<Direction> GetValidSurroundings(NodeContext node)
+    private List<Direction> GetValidSurroundings(NodeContext ingredient)
     {
         var availableDirections = new List<Direction>();
-        foreach (var surrounding in node.surroundingNodes)
+        foreach (var surrounding in ingredient.surroundingNodes)
         {
             if (surrounding != null && surrounding.Interactable)
-                availableDirections.Add((Direction) node.surroundingNodes.IndexOf(surrounding));
+                availableDirections.Add((Direction) ingredient.surroundingNodes.IndexOf(surrounding));
         }
 
         return availableDirections;
@@ -168,44 +167,44 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void MoveToDesiredNode(NodeContext selectedNode, NodeContext targetNode, Direction direction)
+    private void MoveToDesiredNode(NodeContext selectedIngredient, NodeContext targetIngredient, Direction direction)
     {
         onSwipeSuccessful?.Invoke();
         
         _blockInputsWhileTween = true;
-        var targetNodeHeight = GetNodeHeight(targetNode.ChildrenCount);
-        var selectedNodeHeight = GetNodeHeight(selectedNode.ChildrenCount);
+        var targetNodeHeight = GetNodeHeight(targetIngredient.ChildrenCount);
+        var selectedNodeHeight = GetNodeHeight(selectedIngredient.ChildrenCount);
 
         // Tween rotation - rotates object to put on target node
-        selectedNode.Interactable = false;
-        selectedNode.parentNode = targetNode;
-        targetNode.childrenNodes.Add(selectedNode);
+        selectedIngredient.Interactable = false;
+        selectedIngredient.parentNode = targetIngredient;
+        targetIngredient.childrenNodes.Add(selectedIngredient);
 
         var rotate = GetVectorFromDirection(direction) * 180;
-        selectedNode.assignedNodeObject.transform.DORotate(
-            selectedNode.assignedNodeObject.transform.rotation.eulerAngles + rotate,
+        selectedIngredient.assignedNodeObject.transform.DORotate(
+            selectedIngredient.assignedNodeObject.transform.rotation.eulerAngles + rotate,
             0.25f).SetEase(Ease.OutSine);
         
         // Tween movement with bezier path, from actual, to midpoint, to targetPosition, when tween is completed, enable new movement from swipe
         var targetPosition = new Vector3(
-            targetNode.position.x,
+            targetIngredient.position.x,
             targetNodeHeight + selectedNodeHeight, 
-            targetNode.position.y);
+            targetIngredient.position.y);
 
-        var actualPosition = selectedNode.assignedNodeObject.transform.position;
+        var actualPosition = selectedIngredient.assignedNodeObject.transform.position;
         var midPosition = new Vector3(actualPosition.x + (targetPosition.x - actualPosition.x) / 2, targetNodeHeight + selectedNodeHeight + 1f,
             actualPosition.z + (targetPosition.z - actualPosition.z) / 2);
 
-        selectedNode.assignedNodeObject.transform.DOPath(new[] {midPosition, targetPosition}, 0.25f, PathType.CatmullRom).SetEase(Ease.OutSine).
+        selectedIngredient.assignedNodeObject.transform.DOPath(new[] {midPosition, targetPosition}, 0.25f, PathType.CatmullRom).SetEase(Ease.OutSine).
             OnComplete(() =>
             {
                 _blockInputsWhileTween = false;
             });
         
-        _grid.Find(n => n == selectedNode).position = targetNode.position;
+        _grid.Find(n => n == selectedIngredient).position = targetIngredient.position;
         
-        selectedNode.assignedNodeObject.transform.SetParent(targetNode.assignedNodeObject.transform);
-        _lastSelectedNode = selectedNode;
+        selectedIngredient.assignedNodeObject.transform.SetParent(targetIngredient.assignedNodeObject.transform);
+        _lastSelectedIngredient = selectedIngredient;
         LevelManager.Instance.DecreaseNodesAvailable();
 
         ValidateNodes();
@@ -246,8 +245,8 @@ public class GridManager : MonoBehaviour
         var count = 0;
         foreach (var node in _grid)
         {
-            if (node.content == NodeContent.Empty || !node.Interactable) continue;
-            if (node.content != NodeContent.Bread)
+            if ((IngredientType)node.content == IngredientType.Empty || !node.Interactable) continue;
+            if ((IngredientType)node.content != IngredientType.Bread)
                 winCondition = false;
             else
                 count++;
@@ -258,10 +257,10 @@ public class GridManager : MonoBehaviour
             winCondition = false;
         }
         
-        if (_lastSelectedNode.content != NodeContent.Bread)
+        if ((IngredientType)_lastSelectedIngredient.content != IngredientType.Bread)
             winCondition = false;
         
-        StartCoroutine(WaitTweenOnEnd());
+        cameraMovement.CameraLookToObject(_lastSelectedIngredient.GetParent.assignedNodeObject);
 
         if (winCondition)
         {
@@ -272,13 +271,7 @@ public class GridManager : MonoBehaviour
             OnLose?.Invoke();   
         }
     }
-
-    IEnumerator WaitTweenOnEnd()
-    {
-        yield return new WaitForSeconds(0.5f);
-        cameraMovement.CameraLookToObject(_lastSelectedNode.GetParent.assignedNodeObject);
-    }
-
+    
     public void ClearAndInstantiateGrid()
     {
         if (_grid != null && _grid.Count > 0)
@@ -294,7 +287,7 @@ public class GridManager : MonoBehaviour
         }
         _grid.Clear();
         
-        _lastSelectedNode = null;
+        _lastSelectedIngredient = null;
         _gameIsOver = false;
         _blockInputsWhileTween = false;
         

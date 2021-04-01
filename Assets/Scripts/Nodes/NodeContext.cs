@@ -16,7 +16,7 @@ namespace Nodes
         
         [Header("Node Properties")]
         public GameObject assignedNodeObject;
-        public NodeContent content;
+        public int content;
         public Vector2 position;
 
         public NodeContext GetParent

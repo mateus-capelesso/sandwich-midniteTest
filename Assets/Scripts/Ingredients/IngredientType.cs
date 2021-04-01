@@ -1,6 +1,6 @@
-﻿namespace Nodes
+﻿namespace Ingredients
 {
-    public enum NodeContent
+    public enum IngredientType
     {
         Empty = 0,
         Bread = 1,

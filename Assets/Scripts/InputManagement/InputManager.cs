@@ -71,11 +71,11 @@ namespace InputManagement
                 {
                     if (deltaX < 0)
                     {
-                        OnSwipeDetected?.Invoke(Direction.Right, _clickedObject);
+                        OnSwipeDetected?.Invoke(Direction.Left, _clickedObject);
                     }
                     else if (deltaX > 0)
                     {
-                        OnSwipeDetected?.Invoke(Direction.Left, _clickedObject);
+                        OnSwipeDetected?.Invoke(Direction.Right, _clickedObject);
                     }
                 }
             }
@@ -85,11 +85,11 @@ namespace InputManagement
                 {
                     if (deltaY < 0)
                     {
-                        OnSwipeDetected?.Invoke(Direction.Top, _clickedObject);
+                        OnSwipeDetected?.Invoke(Direction.Bottom, _clickedObject);
                     }
                     else if (deltaY > 0)
                     {
-                        OnSwipeDetected?.Invoke(Direction.Bottom, _clickedObject);
+                        OnSwipeDetected?.Invoke(Direction.Top, _clickedObject);
                     }
                 }
             }

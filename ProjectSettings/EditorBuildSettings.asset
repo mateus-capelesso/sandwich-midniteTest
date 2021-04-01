@@ -8,4 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SandwichScene.unity
     guid: 1a3b517dccb427d4ca4ff49520e3e955
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: dae11110dd8954b98a6ad4584eb88bba, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: fd8e9868caa6141c59ac4458be0ec035, type: 2}

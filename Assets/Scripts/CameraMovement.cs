@@ -31,7 +31,7 @@ public class CameraMovement : MonoBehaviour
     private void SetUpCameraForNewLevel()
     {
         if(_sandwich != null)
-            DOTween.Kill(_sandwich.transform);
+            DOTween.KillAll();
         
         transform.position = _cameraPosition;
         transform.rotation = _cameraRotation;

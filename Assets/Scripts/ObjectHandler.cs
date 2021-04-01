@@ -1,5 +1,4 @@
-﻿using System;
-using Nodes;
+﻿using Ingredients;
 using UnityEngine;
 
 public class ObjectHandler : MonoBehaviour
@@ -42,29 +41,29 @@ public class ObjectHandler : MonoBehaviour
         _tomato = Resources.Load<GameObject>("ingredients/Tomato");
     }
 
-    public GameObject GetObjectFromContent(NodeContent content)
+    public GameObject GetObjectFromContent(IngredientType content)
     {
         switch (content)
         {
-            case NodeContent.Empty:
+            case IngredientType.Empty:
                 return _empty;
-            case NodeContent.Bread:
+            case IngredientType.Bread:
                 return _bread;
-            case NodeContent.Bacon:
+            case IngredientType.Bacon:
                 return _bacon;
-            case NodeContent.Cheese:
+            case IngredientType.Cheese:
                 return _cheese;
-            case NodeContent.Egg:
+            case IngredientType.Egg:
                 return _egg;
-            case NodeContent.Ham:
+            case IngredientType.Ham:
                 return _ham;
-            case NodeContent.Onion:
+            case IngredientType.Onion:
                 return _onion;
-            case NodeContent.Salad:
+            case IngredientType.Salad:
                 return _salad;
-            case NodeContent.Salami:
+            case IngredientType.Salami:
                 return _salami;
-            case NodeContent.Tomato:
+            case IngredientType.Tomato:
                 return _tomato;
             default:
                 Debug.LogError($"Couldn't find ingredient {content}");

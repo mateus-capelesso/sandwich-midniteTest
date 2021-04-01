@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Nodes
+namespace Ingredients
 {
     [Serializable]
-    public class Node
+    public class Ingredient
     {
-        public NodeContent content;
+        public IngredientType content;
         public Vector2 position;
     }
 }
