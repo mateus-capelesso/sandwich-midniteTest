@@ -287,8 +287,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f7e0dedee7d43e5969840af4d44209d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generator: {fileID: 147042938}
-  storedSandwichLevels: {fileID: 11400000, guid: 47137ecc95acda949a83be411682b257, type: 2}
+  generator: {fileID: 0}
+  storedSandwichLevels: {fileID: 0}
 --- !u!4 &147042937
 Transform:
   m_ObjectHideFlags: 0
@@ -1244,7 +1244,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1240880586}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ff8c81ae4174d9f8242beda0ba24737, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e498ddc56694f86bda5cc9309da5ebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1447820465
@@ -1974,7 +1974,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2123316892
 RectTransform:
   m_ObjectHideFlags: 0

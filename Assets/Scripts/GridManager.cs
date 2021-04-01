@@ -5,6 +5,7 @@ using DG.Tweening;
 using Ingredients;
 using InputManagement;
 using Levels;
+using Loaders;
 using Nodes;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,8 +16,9 @@ public class GridManager : MonoBehaviour
     public const int GRID_SIZE_Y = 4;
     public const float NODE_HEIGHT = 0.09f;
     
-    public LevelGenerator generator;
+    public SandwichLevelGenerator generator;
     public CameraMovement cameraMovement;
+    public ObjectLoader ingredientsLoader;
     
     private const float NodeSizeX = 1f;
     private const float NodeSizeY = 1f;
@@ -59,31 +61,31 @@ public class GridManager : MonoBehaviour
             {
                 var nodePosition = new Vector2(x, y);
                 var nodeContent = GetNodeContent(levelData, nodePosition);
-                InstantiateNode(nodeContent, nodePosition);
+                InstantiateNode((int)nodeContent, nodePosition);
             }
         }
             
         AssignSurroundingsToContext();
     }
 
-    private IngredientType GetNodeContent(Level actualLevel, Vector2 position)
+    private IngredientType GetNodeContent(SandwichLevel actualSandwichLevel, Vector2 position)
     {
-        return actualLevel.nodes.Exists(node => node.position == position) 
-            ? actualLevel.nodes.FirstOrDefault(n => n.position == position).content
+        return actualSandwichLevel.nodes.Exists(node => node.position == position) 
+            ? actualSandwichLevel.nodes.FirstOrDefault(n => n.position == position).content
             : IngredientType.Empty;
     }
 
-    private void InstantiateNode(IngredientType content, Vector2 position)
+    private void InstantiateNode(int content, Vector2 position)
     {
-        var nodeIngredient = ObjectHandler.Instance.GetObjectFromContent(content);
+        var nodeIngredient = ingredientsLoader.GetObjectFromContent(content);
         var node = Instantiate(nodeIngredient, CalculateNodePosition(position), Quaternion.identity, transform);
 
         var context = node.GetComponent<NodeContext>();
-        context.content = (int) content;
+        context.content = content;
         context.assignedNodeObject = node;
         context.position = position;
 
-        context.Interactable = content != IngredientType.Empty;
+        context.Interactable = content != 0;
         
         _grid.Add(context);
     }
