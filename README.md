@@ -22,3 +22,9 @@ If there are two or more stacks of ingredients, and none of them has any availab
 I decided to work with DOTween on this test since there is a lot of object translation. The tween gives me the ability to animate the movement through code and chain animations with little effort.
 
 If you need any more information about the game, feel free to message me. 
+
+Update from 04/02:
+I refactored some code to create the optional task. Some scripts now inherit from others. For instance, the grid manager has two derived classes, PowerTwo and Sandwich. The main code is on GridManager, and specific functions are on the derived classes. The same happens with the LevelManager, which now has two derived classes.
+Unfortunately, I wasn't able to conclude the optional task. I tried to work out a way to do it with my current game logic made for the sandwich game. But I couldn't find a way to do it. My last attempt was to use raycast to detect which type of node is under or above some other node, but it wasn't working.
+
+It took me around 12 hours to create the sandwich clone. I worked about 5 hours on the PowerTwo game. I won't be able to work more on the test for the next couple of days, that's why I decided to send it, even with the optional task not finished.
