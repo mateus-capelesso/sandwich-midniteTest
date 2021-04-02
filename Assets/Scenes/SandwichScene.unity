@@ -559,9 +559,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
-        m_MethodName: ClearAndInstantiateGrid
+      - m_Target: {fileID: 147042936}
+        m_TargetAssemblyTypeName: Levels.LevelManager, Assembly-CSharp
+        m_MethodName: CallNewLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
