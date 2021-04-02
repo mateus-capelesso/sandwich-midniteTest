@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
@@ -30,6 +31,14 @@ namespace Nodes
                 }
 
                 return node;
+            }
+        }
+
+        public void AddChildren(NodeContext child)
+        {
+            if (!childrenNodes.Contains(child))
+            {
+                childrenNodes.Add(child);
             }
         }
 

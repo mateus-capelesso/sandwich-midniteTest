@@ -1,8 +1,8 @@
+using Levels;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    // public static SoundManager Instance;
     private AudioClip _swipeSound;
     private AudioSource _source;
     private AudioClip _click;
@@ -15,8 +15,8 @@ public class SoundManager : MonoBehaviour
         _source = GetComponent<AudioSource>();
         _source.playOnAwake = false;
 
-        GridManager.OnWin += PlayWin;
-        GridManager.OnLose += PlayLose;
+        LevelManager.OnWin += PlayWin;
+        LevelManager.OnLose += PlayLose;
     }
 
     private void LoadSounds()

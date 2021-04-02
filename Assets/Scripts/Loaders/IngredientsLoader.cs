@@ -24,16 +24,16 @@ namespace Loaders
 
         private void LoadObjects()
         {
-            _empty = Resources.Load<GameObject>("ingredients/Empty");
-            _bread = Resources.Load<GameObject>("ingredients/Bread");
-            _bacon = Resources.Load<GameObject>("ingredients/Bacon");
-            _cheese = Resources.Load<GameObject>("ingredients/Cheese");
-            _egg = Resources.Load<GameObject>("ingredients/Egg");
-            _ham = Resources.Load<GameObject>("ingredients/Ham");
-            _onion = Resources.Load<GameObject>("ingredients/Onion");
-            _salad = Resources.Load<GameObject>("ingredients/Salad");
-            _salami = Resources.Load<GameObject>("ingredients/Salami");
-            _tomato = Resources.Load<GameObject>("ingredients/Tomato");
+            _empty = Resources.Load<GameObject>("Sandwich/Prefabs/Empty");
+            _bread = Resources.Load<GameObject>("Sandwich/Prefabs/Bread");
+            _bacon = Resources.Load<GameObject>("Sandwich/Prefabs/Bacon");
+            _cheese = Resources.Load<GameObject>("Sandwich/Prefabs/Cheese");
+            _egg = Resources.Load<GameObject>("Sandwich/Prefabs/Egg");
+            _ham = Resources.Load<GameObject>("Sandwich/Prefabs/Ham");
+            _onion = Resources.Load<GameObject>("Sandwich/Prefabs/Onion");
+            _salad = Resources.Load<GameObject>("Sandwich/Prefabs/Salad");
+            _salami = Resources.Load<GameObject>("Sandwich/Prefabs/Salami");
+            _tomato = Resources.Load<GameObject>("Sandwich/Prefabs/Tomato");
         }
 
         public override GameObject GetObjectFromContent(int contentIndexType)

@@ -26,18 +26,18 @@ namespace Loaders
 
         private void LoadObjects()
         {
-            _empty = Resources.Load<GameObject>("powertwo/Empty");
-            _power2 = Resources.Load<GameObject>("powertwo/Power2");
-            _power4 = Resources.Load<GameObject>("powertwo/Power4");
-            _power8 = Resources.Load<GameObject>("powertwo/Power8");
-            _power16 = Resources.Load<GameObject>("powertwo/Power16");
-            _power32 = Resources.Load<GameObject>("powertwo/Power32");
-            _power64 = Resources.Load<GameObject>("powertwo/Power64");
-            _power128 = Resources.Load<GameObject>("powertwo/Power128");
-            _power256 = Resources.Load<GameObject>("ingredients/Power256");
-            _power512 = Resources.Load<GameObject>("powertwo/Power512");
-            _power1024 = Resources.Load<GameObject>("powertwo/Power1024");
-            _power2048 = Resources.Load<GameObject>("powertwo/Power2048");
+            _empty = Resources.Load<GameObject>("PowerTwo/Prefabs/Empty");
+            _power2 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power2");
+            _power4 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power4");
+            _power8 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power8");
+            _power16 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power16");
+            _power32 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power32");
+            _power64 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power64");
+            _power128 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power128");
+            _power256 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power256");
+            _power512 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power512");
+            _power1024 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power1024");
+            _power2048 = Resources.Load<GameObject>("PowerTwo/Prefabs/Power2048");
         }
 
         public override GameObject GetObjectFromContent(int contentIndexType)

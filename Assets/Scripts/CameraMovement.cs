@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Start()
     {
-        LevelManager.Instance.OnNewLevelStart += SetUpCameraForNewLevel;
+        LevelManager.OnNewLevelStart += SetUpCameraForNewLevel;
         _cameraPosition = transform.position;
         _cameraRotation = transform.rotation;
     }
@@ -28,7 +28,7 @@ public class CameraMovement : MonoBehaviour
         
     }
 
-    private void SetUpCameraForNewLevel()
+    private void SetUpCameraForNewLevel(int level)
     {
         if(_sandwich != null)
             DOTween.KillAll();

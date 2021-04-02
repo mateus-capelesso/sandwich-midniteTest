@@ -3,7 +3,6 @@ using DG.Tweening;
 using Levels;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InterfaceControl : MonoBehaviour
 {
@@ -15,15 +14,15 @@ public class InterfaceControl : MonoBehaviour
 
     private void Start()
     {
-        LevelManager.Instance.OnNewLevelStart += SetTextLevel;
-        GridManager.OnWin += ShowNextButton;
-        GridManager.OnLose += ShowTryAgain;
+        LevelManager.OnNewLevelStart += SetTextLevel;
+        LevelManager.OnWin += ShowNextButton;
+        LevelManager.OnLose += ShowTryAgain;
     }
 
-    private void SetTextLevel()
+    private void SetTextLevel(int level)
     {
         textLevel.gameObject.SetActive(true);
-        textLevel.text = LevelManager.Instance.GetActualLevel().ToString();
+        textLevel.text = $"{level}";
         undoButton.SetActive(true);
         nextLevelButton.SetActive(false);
         tryAgainButton.SetActive(false);
